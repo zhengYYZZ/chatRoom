@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/new/login">
+        <file>icon/IP.png</file>
+        <file>icon/name.png</file>
+        <file>icon/max.png</file>
+        <file>icon/min.png</file>
+        <file>icon/close.png</file>
+    </qresource>
+    <qresource prefix="/new/chatroom">
+        <file>image/bold.png</file>
+        <file>image/clear.png</file>
+        <file>image/color.png</file>
+        <file>image/italic.png</file>
+        <file>image/save.png</file>
+        <file>image/send.png</file>
+        <file>image/under.png</file>
+    </qresource>
+</RCC>
