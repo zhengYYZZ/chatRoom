@@ -16,6 +16,7 @@ login::login(QWidget *parent) :
     titleBar = new BaseWindow;
     ui->setupUi(this);
 
+
     initTitleBar();
     initControl();
 
@@ -43,6 +44,7 @@ void login::initTitleBar()
 
 void login::initControl()
 {
+#if 0
     //设置上半角背景图片
     QPixmap backicon(tr("bargroud.jpg"));
     backicon = backicon.scaled(ui->backgroundLabel->width(),ui->backgroundLabel->height());
@@ -64,6 +66,7 @@ void login::initControl()
 
     headicon = headicon.scaled(wid,hei);
     ui->headPortraitLabel->setPixmap(headicon);
+#endif
 
 
 

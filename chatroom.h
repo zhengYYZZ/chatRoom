@@ -3,6 +3,11 @@
 
 #include <QWidget>
 
+/*
+ * 使用UDP协议进行聊天
+ * 使用TCP协议进行文件传输
+ */
+
 namespace Ui {
 class chatRoom;
 }

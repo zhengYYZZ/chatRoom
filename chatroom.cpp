@@ -20,6 +20,7 @@ chatRoom::chatRoom(QWidget *parent,User u) :
 {
     ui->setupUi(this);
     setUser(u);
+    setWindowTitle("聊天室  "+user.address);
 
     udpSocket = new QUdpSocket(this);
     port = 45454;   //设置端口号
@@ -35,7 +36,8 @@ chatRoom::chatRoom(QWidget *parent,User u) :
     connect(ui->messageTextEdit,SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this,SLOT(currentFormatChanged(QTextCharFormat)));
 
-        ui->messageTextEdit->installEventFilter(this);
+    //设置消息过滤器
+    ui->messageTextEdit->installEventFilter(this);
 }
 
 chatRoom::~chatRoom()
@@ -188,7 +190,8 @@ void chatRoom::closeEvent(QCloseEvent *event)
     sendMessage(ParticipantLeft);
     QWidget::closeEvent(event);
 }
-//
+
+//快捷键ctrl+enter发送消息
 bool chatRoom::eventFilter(QObject *obj, QEvent *event)
 {
 #if 1

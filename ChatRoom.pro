@@ -54,3 +54,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     icon.qrc
+
+#set icon
+RC_ICONS = chatIcon.ico

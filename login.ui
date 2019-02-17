@@ -61,27 +61,14 @@
   <widget class="QPushButton" name="createPushButton">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>300</y>
-     <width>93</width>
-     <height>30</height>
+     <x>130</x>
+     <y>290</y>
+     <width>161</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
     <string>创建房间</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="joinPushButton">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>300</y>
-     <width>93</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>加入房间</string>
    </property>
   </widget>
   <widget class="QLabel" name="headPortraitLabel">
@@ -92,6 +79,9 @@
      <width>91</width>
      <height>81</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-image: url(:/new/login/icon/head.jpg);</string>
    </property>
    <property name="text">
     <string/>
@@ -107,7 +97,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">border-image: url(:/new/login/icon/bargroud.jpg);</string>
    </property>
    <property name="text">
     <string/>
@@ -137,7 +127,6 @@
   <zorder>nameLable</zorder>
   <zorder>ipLabel</zorder>
   <zorder>createPushButton</zorder>
-  <zorder>joinPushButton</zorder>
   <zorder>nameLineEdit</zorder>
   <zorder>ipLineEdit</zorder>
   <zorder>headPortraitLabel</zorder>

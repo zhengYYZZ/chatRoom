@@ -5,6 +5,8 @@
         <file>icon/max.png</file>
         <file>icon/min.png</file>
         <file>icon/close.png</file>
+        <file>icon/bargroud.jpg</file>
+        <file>icon/head.jpg</file>
     </qresource>
     <qresource prefix="/new/chatroom">
         <file>image/bold.png</file>
