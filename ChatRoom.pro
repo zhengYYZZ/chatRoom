@@ -31,7 +31,7 @@ SOURCES += \
     mytitlebar.cpp \
     tcpclient.cpp \
     tcpserver.cpp \
-    charroom.cpp
+    chatroom.cpp
 
 HEADERS += \
         login.h \
@@ -39,13 +39,13 @@ HEADERS += \
     mytitlebar.h \
     tcpclient.h \
     tcpserver.h \
-    charroom.h
+    chatroom.h
 
 FORMS += \
         login.ui \
     tcpclient.ui \
     tcpserver.ui \
-    charroom.ui
+    chatroom.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

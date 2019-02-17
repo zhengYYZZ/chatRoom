@@ -6,6 +6,10 @@
 #include <QPushButton>
 #include <QTimer>
 
+/*
+ * 自定义标题栏按钮宽度属性
+ */
+
 enum ButtonType
 {
     MIN_BUTTON = 0,         // 最小化和关闭按钮;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>charRoom</class>
- <widget class="QWidget" name="charRoom">
+ <class>chatRoom</class>
+ <widget class="QWidget" name="chatRoom">
   <property name="geometry">
    <rect>
     <x>0</x>

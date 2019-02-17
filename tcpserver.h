@@ -3,6 +3,12 @@
 
 #include <QDialog>
 #include <QTime>
+
+
+/*
+ * 文件传输服务端
+ */
+
 namespace Ui {
 class TcpServer;
 }

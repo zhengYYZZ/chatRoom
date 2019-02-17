@@ -2,7 +2,9 @@
 #define LOGIN_H
 
 #include <QWidget>
+#include <QString>
 #include "basewindow.h"
+#include "chatroom.h"
 
 /*
  * 登录界面
@@ -17,6 +19,7 @@ namespace Ui {
 class login;
 }
 
+
 class login : public BaseWindow
 {
     Q_OBJECT
@@ -29,11 +32,18 @@ public:
     void initTitleBar();
     //初始化控件
     void initControl();
+    //获取ip地址
+    QString getIP();
 
+
+private slots:
+    void on_createPushButton_clicked();
 
 private:
     Ui::login *ui;
     BaseWindow *titleBar;
+    User users;
+    chatRoom *chat;
 };
 
 #endif // LOGIN_H

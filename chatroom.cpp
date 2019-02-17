@@ -1,5 +1,5 @@
-#include "charroom.h"
-#include "ui_charroom.h"
+#include "chatroom.h"
+#include "ui_chatroom.h"
 #include "tcpserver.h"
 #include "tcpclient.h"
 #include <QFileDialog>
@@ -12,39 +12,47 @@
 #include <QProcess>
 #include <QColorDialog>
 #include <QTextCharFormat>
+#include <QKeyEvent>
 
-charRoom::charRoom(QWidget *parent) :
+chatRoom::chatRoom(QWidget *parent,User u) :
     QWidget(parent),
-    ui(new Ui::charRoom)
+    ui(new Ui::chatRoom)
 {
     ui->setupUi(this);
+    setUser(u);
+
     udpSocket = new QUdpSocket(this);
     port = 45454;   //设置端口号
     udpSocket->bind(port,QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);    //绑定端口
     connect(udpSocket,SIGNAL(readyRead()),this,SLOT(processPendingDatagrams()));
     sendMessage(NewParticipant);
 
+
+
     server = new TcpServer(this);
     connect(server,SIGNAL(sendFileName(QString)),
             this,SLOT(getFileName(QString)));
     connect(ui->messageTextEdit,SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this,SLOT(currentFormatChanged(QTextCharFormat)));
+
+        ui->messageTextEdit->installEventFilter(this);
 }
 
-charRoom::~charRoom()
+chatRoom::~chatRoom()
 {
     delete ui;
 }
 
 //成员加入处理函数
-void charRoom::newParticipant(QString userName, QString localHostName, QString ipAddress)
+void chatRoom::newParticipant(QString userName, QString localHostName, QString ipAddress)
 {
     //使用主机名判断用户是否已经加入
     bool isEmpty = ui->userTableWidget
             ->findItems(localHostName,Qt::MatchExactly).isEmpty();
 
     //如果用户未加入则向界面右侧的用户列表加入新用户的信息
-    if(isEmpty) {
+    if(isEmpty
+            ) {
         QTableWidgetItem *user = new QTableWidgetItem(userName);
         QTableWidgetItem *host = new QTableWidgetItem(localHostName);
         QTableWidgetItem *ip = new QTableWidgetItem(ipAddress);
@@ -65,7 +73,7 @@ void charRoom::newParticipant(QString userName, QString localHostName, QString i
 }
 
 //成员离开处理函数
-void charRoom::participantLeft(QString username, QString localHostName, QString time)
+void chatRoom::participantLeft(QString username, QString localHostName, QString time)
 {
     int rowNum = ui->userTableWidget->findItems(localHostName,
                                                 Qt::MatchExactly).first()->row();
@@ -78,7 +86,7 @@ void charRoom::participantLeft(QString username, QString localHostName, QString 
 }
 
 //广播消息，type用于接收端区分消息类型
-void charRoom::sendMessage(MessageType type, QString serverAddress)
+void chatRoom::sendMessage(MessageType type, QString serverAddress)
 {
     QByteArray data;
     QDataStream out(&data,QIODevice::WriteOnly);
@@ -131,7 +139,7 @@ void charRoom::sendMessage(MessageType type, QString serverAddress)
 }
 
 //判断是否接收、发送文件
-void charRoom::hasPendingFile(QString userName, QString serverAddress,
+void chatRoom::hasPendingFile(QString userName, QString serverAddress,
                             QString clientAddress, QString fileName)
 {
 
@@ -159,7 +167,7 @@ void charRoom::hasPendingFile(QString userName, QString serverAddress,
 }
 
 //保存接受的文件
-bool charRoom::saveFile(const QString &fileName)
+bool chatRoom::saveFile(const QString &fileName)
 {
     QFile file(fileName);
     if(!file.open(QFile::WriteOnly|QFile::Text)) {
@@ -175,26 +183,49 @@ bool charRoom::saveFile(const QString &fileName)
 
 
 //关闭事件：在关闭程序时发送用户离开的广播，让其他端点在其用户列表中删除用户
-void charRoom::closeEvent(QCloseEvent *event)
+void chatRoom::closeEvent(QCloseEvent *event)
 {
     sendMessage(ParticipantLeft);
     QWidget::closeEvent(event);
 }
+//
+bool chatRoom::eventFilter(QObject *obj, QEvent *event)
+{
+#if 1
+    if(obj == ui->messageTextEdit){
+
+        if(event->type() == QEvent::KeyPress){
+            QKeyEvent *k = static_cast<QKeyEvent *>(event);
+            //按下ctrl+enter发消息
+            if(k->key() == Qt::Key_Return &&(k->modifiers() & Qt::ControlModifier))
+            {
+                on_sendButton_clicked();
+                return true;
+            }
+        }
+    }
+    return false;
+#endif
+}
 
 //获取IP地址
-QString charRoom::getIP()
+QString chatRoom::getIP()
 {
+#if 0
     QList<QHostAddress>list = QNetworkInterface::allAddresses();
     foreach(QHostAddress address,list) {
         if(address.protocol() == QAbstractSocket::IPv4Protocol)
             return address.toString();
     }
     return 0;
+#endif
+    return user.address;
 }
 
 //获取用户名
-QString charRoom::getUserName()
+QString chatRoom::getUserName()
 {
+#if 0
     QStringList envVariables;
     envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
                  << "HOSTNAME.*" << "DOMAINNAME.*";
@@ -206,16 +237,19 @@ QString charRoom::getUserName()
             QStringList stringList = environment.at(index).split('=');
             if(stringList.size() == 2)
             {
+                qDebug() << stringList.at(1);
                 return stringList.at(1);
                 break;
             }
         }
     }
     return "unKnow";
+#endif
+    return user.name;
 }
 
 //获取用户输入的消息并设置
-QString charRoom::getMessage()
+QString chatRoom::getMessage()
 {
     QString msg = ui->messageTextEdit->toHtml();
     ui->messageTextEdit->clear();   //将文本编辑器内容清空
@@ -224,7 +258,7 @@ QString charRoom::getMessage()
 }
 
 //处理接收到的广播消息
-void charRoom::processPendingDatagrams()
+void chatRoom::processPendingDatagrams()
 {
     while(udpSocket->hasPendingDatagrams())
     {
@@ -283,19 +317,20 @@ void charRoom::processPendingDatagrams()
 }
 
 //发送按钮--槽
-void charRoom::on_sendButton_clicked()
+void chatRoom::on_sendButton_clicked()
 {
     sendMessage(Message);
 }
 
-void charRoom::getFileName(QString name)
+//给出文件名
+void chatRoom::getFileName(QString name)
 {
     fileName = name;
     sendMessage(FileName);   //upd广播要发送的文件名
 }
 
 //传输文件按钮--槽
-void charRoom::on_sendToolBtn_clicked()
+void chatRoom::on_sendToolBtn_clicked()
 {
     if(ui->userTableWidget->selectedItems().isEmpty())
     {
@@ -308,14 +343,14 @@ void charRoom::on_sendToolBtn_clicked()
 }
 
 //更改字体大小
-void charRoom::on_SizeComboBox_currentIndexChanged(const QString &arg1)
+void chatRoom::on_SizeComboBox_currentIndexChanged(const QString &arg1)
 {
     ui->messageTextEdit->setFontPointSize(arg1.toDouble());
     ui->messageTextEdit->setFocus();
 }
 
 //加粗
-void charRoom::on_boldToolBtn_clicked(bool checked)
+void chatRoom::on_boldToolBtn_clicked(bool checked)
 {
     if(checked)
     {
@@ -330,21 +365,21 @@ void charRoom::on_boldToolBtn_clicked(bool checked)
 
 
 //斜体
-void charRoom::on_italicToolBtn_clicked(bool checked)
+void chatRoom::on_italicToolBtn_clicked(bool checked)
 {
     ui->messageTextEdit->setFontItalic(checked);
     ui->messageTextEdit->setFocus();
 }
 
 //下划线
-void charRoom::on_underlineToolBtn_clicked(bool checked)
+void chatRoom::on_underlineToolBtn_clicked(bool checked)
 {
     ui->messageTextEdit->setFontUnderline(checked);
     ui->messageTextEdit->setFocus();
 }
 
 //字体颜色
-void charRoom::on_colorToolBtn_clicked()
+void chatRoom::on_colorToolBtn_clicked()
 {
     color = QColorDialog::getColor(color,this);
     if(color.isValid()) {
@@ -354,7 +389,7 @@ void charRoom::on_colorToolBtn_clicked()
 }
 
 //设置字体时可切换到相应状态
-void charRoom::currentFormatChanged(const QTextCharFormat &format)
+void chatRoom::currentFormatChanged(const QTextCharFormat &format)
 {
     ui->fontComboBox->setCurrentFont(format.font());
     if(format.fontPointSize() < 9) {
@@ -371,7 +406,7 @@ void charRoom::currentFormatChanged(const QTextCharFormat &format)
 }
 
 //保存聊天记录
-void charRoom::on_saveToolBtn_clicked()
+void chatRoom::on_saveToolBtn_clicked()
 {
     if(ui->messageBrowser->document()->isEmpty()) {
         QMessageBox::warning(0,tr("警告"),
@@ -385,19 +420,31 @@ void charRoom::on_saveToolBtn_clicked()
 }
 
 //清空聊天记录
-void charRoom::on_clearToolBtn_clicked()
+void chatRoom::on_clearToolBtn_clicked()
 {
     ui->messageBrowser->clear();
 }
 
 //退出按钮
-void charRoom::on_exitButton_clicked()
+void chatRoom::on_exitButton_clicked()
 {
     close();
 }
 
-void charRoom::on_fontComboBox_currentFontChanged(const QFont &f)
+//改变字体
+void chatRoom::on_fontComboBox_currentFontChanged(const QFont &f)
 {
     ui->messageTextEdit->setCurrentFont(f);
     ui->messageTextEdit->setFocus();
 }
+
+
+void chatRoom::setUser(User u)
+{
+    user.name = u.name;
+    user.address = u.address;
+    user.hostaddress = u.hostaddress;
+    qDebug() << user.name<<user.hostaddress<<user.address;
+}
+
+

@@ -5,6 +5,10 @@
 #include <QPainterPath>
 #include <QPainter>
 #include <QString>
+#include <QNetworkInterface>
+#include<QDebug>
+#include<QMessageBox>
+
 login::login(QWidget *parent) :
     BaseWindow(parent),
     ui(new Ui::login)
@@ -66,5 +70,39 @@ void login::initControl()
     //暗注释
     ui->nameLineEdit->setPlaceholderText(QStringLiteral(" 昵称"));
     ui->ipLineEdit->setPlaceholderText(tr(" IP地址"));
+
+    ui->ipLineEdit->setText(getIP());   //将ip显示到地址栏上
+
 }
+
+QString login::getIP()
+{
+    QList<QHostAddress>list = QNetworkInterface::allAddresses();
+    foreach(QHostAddress address,list) {
+        if(address.protocol() == QAbstractSocket::IPv4Protocol)
+            return address.toString();
+    }
+    return 0;
+}
+
+
+void login::on_createPushButton_clicked()
+{
+    users.name = ui->nameLineEdit->text();
+    if(ui->nameLineEdit->text() == "")
+    {
+        QMessageBox::warning(0,tr("警告"),
+                             tr("发送内容不能为空"),QMessageBox::Ok);
+        return;
+    }
+    users.hostaddress = getIP();
+    users.address = getIP();
+    //qDebug() << users.address << users.name << users.hostaddress;
+    chat = new chatRoom(0,users);
+    //chat->setUser(users);
+    chat->show();
+
+    this->hide();
+}
+
 

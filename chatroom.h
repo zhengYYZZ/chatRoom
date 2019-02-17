@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class charRoom;
+class chatRoom;
 }
 
 class QUdpSocket;
@@ -14,13 +14,21 @@ class QTextCharFormat;
 //枚举变量分别表示消息类型、新用户加入、用户退出、文件名、拒绝接受文件
 enum MessageType {Message,NewParticipant,ParticipantLeft,FileName,Refuse};
 
-class charRoom : public QWidget
+struct User{
+    QString name;
+    QString hostaddress;
+    QString address;
+};
+
+class chatRoom : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit charRoom(QWidget *parent = 0);
-    ~charRoom();
+    explicit chatRoom(QWidget *parent = 0,User u = {"","",""});
+    ~chatRoom();
+    //用于从登陆端接收用户信息
+    void setUser(User u);
 
 protected:
     //新成员加入
@@ -38,6 +46,8 @@ protected:
     bool saveFile(const QString &fileName);
     //关闭事件
     void closeEvent(QCloseEvent *event);
+    //事件过滤器，按下回车发送信息
+    bool eventFilter(QObject *obj, QEvent *event);
 
     //获取IP地址
     QString getIP();
@@ -46,12 +56,13 @@ protected:
     //获取消息
     QString getMessage();
 private:
-    Ui::charRoom *ui;
+    Ui::chatRoom *ui;
     QUdpSocket *udpSocket;
     qint16 port;
     QString fileName;
     TcpServer *server;
     QColor color;
+    User user;
 
 private slots:
     //接收广播消息——槽

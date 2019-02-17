@@ -4,6 +4,10 @@
 #include <QWidget>
 #include "mytitlebar.h"
 
+/*
+ * 自定义标题栏
+ */
+
 class BaseWindow : public QWidget
 {
     Q_OBJECT

@@ -6,6 +6,10 @@
 #include <QFile>
 #include <QTime>
 
+/*
+ * 文件传输客户端
+ */
+
 class QTcpSocket;
 
 namespace Ui {
