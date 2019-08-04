@@ -10,9 +10,9 @@ qt_局域网聊天室，修改自《Qt开发实战》中的例子
  + C++11
 
 ## 效果
-**登录界面**
+**登录界面.**
  ![image](./images/Demonstrate.jpg)
-**聊天界面**
+**聊天界面.**
  ![image](./images/Demonstrate2.jpg)
 
 ## 各模块功能
@@ -33,6 +33,7 @@ qt_局域网聊天室，修改自《Qt开发实战》中的例子
 			显示文件传输百分比与需要传输的时间
 
 ## 数据流程
-**主要通过UDP与TCP协议来分别实现消息的传播和文件传输的功能**
- ![image](./images/data_flow.png)
-
+#### 主要通过UDP与TCP协议来分别实现消息的传播和文件传输的功能
+ ![image](./images/data_flow.png）
+#### 文件传输模块流程图
+ ![image](./images/data_flow2.png)
