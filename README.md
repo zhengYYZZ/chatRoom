@@ -10,9 +10,9 @@ qt_局域网聊天室，修改自《Qt开发实战》中的例子
  + C++11
 
 ## 效果
-**登录界面.**
+#### 登录界面
  ![image](./images/Demonstrate.jpg)
-**聊天界面.**
+#### 聊天界面
  ![image](./images/Demonstrate2.jpg)
 
 ## 各模块功能
