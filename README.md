@@ -7,12 +7,16 @@ Linux：使用Qt Creator打开ChatRoom.pro编译运行
 
 ## 效果
 登录界面
+<br>
 ![](https://github.com/zhengYYZZ/chatRoom/blob/master/images/Demonstrate.jpg)
+<br>
 聊天界面
+<br>
 ![](https://github.com/zhengYYZZ/chatRoom/blob/master/images/Demonstrate2.jpg)
 
 ## 各模块功能
 ![](https://github.com/zhengYYZZ/chatRoom/blob/master/images/software_module.jpg)
+<br>
 	各模块功能：
 		登录模块：自定义标题栏
 			 获取用户输入的名字
@@ -28,8 +32,10 @@ Linux：使用Qt Creator打开ChatRoom.pro编译运行
 			 显示文件传输百分比与需要传输的时间
 
 ## 数据流程
-主要通过UDP与TCP协议来分别实现消息的传播和文件传输的功能
+主要通过UDP与TCP协议来分别实现消息的传播和文件传输的功能 <br>
+
 ![](https://github.com/zhengYYZZ/chatRoom/blob/master/images/data_flow.png)
 
-文件传输模块流程图
+文件传输模块流程图 <br>
+
 ![](https://github.com/zhengYYZZ/chatRoom/blob/master/images/data_flow2.png)
