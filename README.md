@@ -2,8 +2,8 @@
 qt_局域网聊天室，修改自《Qt开发实战》中的例子
 
 ## 运行软件
-Windows：进入 <Windows版本_编译完成> 目录，点击ChatRoom.exe <br>
-Linux：使用Qt Creator打开ChatRoom.pro编译运行
+ Windows：进入 <Windows版本_编译完成> 目录，点击ChatRoom.exe <br>
+ Linux：使用Qt Creator打开ChatRoom.pro编译运行
 
 ## 依赖环境
  + Qt5.12
@@ -11,9 +11,9 @@ Linux：使用Qt Creator打开ChatRoom.pro编译运行
 
 ## 效果
 **登录界面**
-![image](./images/Demonstrate.jpg)
+ ![image](./images/Demonstrate.jpg)
 **聊天界面**
-![image](./images/Demonstrate2.jpg)
+ ![image](./images/Demonstrate2.jpg)
 
 ## 各模块功能
 ![image](./images/software_module.jpg)
@@ -35,6 +35,6 @@ Linux：使用Qt Creator打开ChatRoom.pro编译运行
 
 ## 数据流程
 **主要通过UDP与TCP协议来分别实现消息的传播和文件传输的功能**
-![image](./images/data_flow.png)
+ ![image](./images/data_flow.png)
 **文件传输模块流程图 <br>**
-![image](./images/data_flow2.png)
+ ![image](./images/data_flow2.png)
