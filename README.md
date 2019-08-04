@@ -34,6 +34,6 @@ qt_局域网聊天室，修改自《Qt开发实战》中的例子
 
 ## 数据流程
 #### 主要通过UDP与TCP协议来分别实现消息的传播和文件传输的功能
- ![image](./images/data_flow.png）
+ ![image](./images/data_flow.png)
 #### 文件传输模块流程图
  ![image](./images/data_flow2.png)
